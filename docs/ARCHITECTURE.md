@@ -21,12 +21,12 @@
 
 ```mermaid
 flowchart LR
-    U[User] --> C[omni-studio client\n(Phase 2)]
+    U[User] --> C["omni-studio client<br/>(Phase 2)"]
     S[Slack] --> C
     C -->|MCP stdio / streamable-http| M[omni-mcp server]
 
-    M --> P[SecurityPolicy\n(HTTPS, allowlist, limits)]
-    M --> K[Built-in Skills\nTools / Resources / Prompts]
+    M --> P["SecurityPolicy<br/>(HTTPS, allowlist, limits)"]
+    M --> K["Built-in Skills<br/>Tools / Resources / Prompts"]
     K --> R[Result]
     R --> C
     C --> U
@@ -36,13 +36,13 @@ flowchart LR
 
 ```mermaid
 graph TD
-    A[src/omni_mcp/main.py\nCLI + transport] --> B[src/omni_mcp/server.py\nFastMCP assembly]
-    B --> C[src/omni_mcp/config.py\nSettings]
-    B --> D[src/omni_mcp/security.py\nPolicy]
-    B --> E[src/omni_mcp/skills/builtin.py\nTools/Resources/Prompts]
+    A["src/omni_mcp/main.py<br/>CLI + transport"] --> B["src/omni_mcp/server.py<br/>FastMCP assembly"]
+    B --> C["src/omni_mcp/config.py<br/>Settings"]
+    B --> D["src/omni_mcp/security.py<br/>Policy"]
+    B --> E["src/omni_mcp/skills/builtin.py<br/>Tools/Resources/Prompts"]
 
-    F[Dockerfile\ncontainer runtime] --> B
-    G[deploy/helm/omni-mcp\nKubernetes packaging] --> F
+    F["Dockerfile<br/>container runtime"] --> B
+    G["deploy/helm/omni-mcp<br/>Kubernetes packaging"] --> F
 ```
 
 ## Deployment topology (Mermaid)

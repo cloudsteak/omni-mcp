@@ -21,12 +21,12 @@ Az `omni-mcp` egy moduláris, FastMCP alapú Python szerver:
 
 ```mermaid
 flowchart LR
-    U[Felhasználó] --> C[omni-studio kliens\n(2. fázis)]
+    U[Felhasználó] --> C["omni-studio kliens<br/>(2. fázis)"]
     S[Slack] --> C
     C -->|MCP stdio / streamable-http| M[omni-mcp szerver]
 
-    M --> P[SecurityPolicy\n(HTTPS, allowlist, limitek)]
-    M --> K[Beépített skill-ek\nTool / Resource / Prompt]
+    M --> P["SecurityPolicy<br/>(HTTPS, allowlist, limitek)"]
+    M --> K["Beépített skill-ek<br/>Tool / Resource / Prompt"]
     K --> R[Válasz]
     R --> C
     C --> U
@@ -36,13 +36,13 @@ flowchart LR
 
 ```mermaid
 graph TD
-    A[src/omni_mcp/main.py\nCLI + transport] --> B[src/omni_mcp/server.py\nFastMCP összeállítás]
-    B --> C[src/omni_mcp/config.py\nBeállítások]
-    B --> D[src/omni_mcp/security.py\nPolicy]
-    B --> E[src/omni_mcp/skills/builtin.py\nTool/Resource/Prompt]
+    A["src/omni_mcp/main.py<br/>CLI + transport"] --> B["src/omni_mcp/server.py<br/>FastMCP összeállítás"]
+    B --> C["src/omni_mcp/config.py<br/>Beállítások"]
+    B --> D["src/omni_mcp/security.py<br/>Policy"]
+    B --> E["src/omni_mcp/skills/builtin.py<br/>Tool/Resource/Prompt"]
 
-    F[Dockerfile\nkonténer futtatás] --> B
-    G[deploy/helm/omni-mcp\nKubernetes csomagolás] --> F
+    F["Dockerfile<br/>konténer futtatás"] --> B
+    G["deploy/helm/omni-mcp<br/>Kubernetes csomagolás"] --> F
 ```
 
 ## Deployment topológia (Mermaid)
