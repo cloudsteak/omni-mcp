@@ -22,11 +22,3 @@ def test_allowlist_blocks_unknown_host() -> None:
 
     with pytest.raises(SecurityError):
         policy.validate_outbound_url("https://not-allowed.example.org")
-
-
-def test_validate_tenant_id() -> None:
-    policy = SecurityPolicy(Settings())
-    policy.validate_tenant_id("user_123@example.com")
-
-    with pytest.raises(SecurityError):
-        policy.validate_tenant_id("bad tenant id with spaces")

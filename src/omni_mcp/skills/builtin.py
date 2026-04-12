@@ -10,10 +10,16 @@ import httpx
 from mcp.server.fastmcp import FastMCP
 
 from omni_mcp.config import Settings
+from omni_mcp.llm_runtime import LlmRuntime
 from omni_mcp.security import SecurityPolicy
 
 
-def register_builtin_skills(server: FastMCP, settings: Settings, policy: SecurityPolicy) -> None:
+def register_builtin_skills(
+    server: FastMCP,
+    settings: Settings,
+    policy: SecurityPolicy,
+    llm_runtime: LlmRuntime,
+) -> None:
     """Register all default MCP tools, resources, and prompts."""
 
     @server.tool(
@@ -40,6 +46,7 @@ def register_builtin_skills(server: FastMCP, settings: Settings, policy: Securit
                 "file_read": settings.enable_file_read_skill,
                 "time": settings.enable_time_skill,
                 "json": settings.enable_json_skill,
+                "llm": settings.enable_llm_skill,
             },
         }
 
@@ -110,6 +117,37 @@ def register_builtin_skills(server: FastMCP, settings: Settings, policy: Securit
 
             return {"path": str(requested), "content": resolved.read_text(encoding="utf-8")}
 
+    if settings.enable_llm_skill:
+
+        @server.tool(
+            name="llm.runtime_info",
+            description="Returns non-sensitive effective LLM runtime settings.",
+        )
+        def llm_runtime_info() -> dict[str, object]:
+            return llm_runtime.runtime_info()
+
+        @server.tool(
+            name="llm.generate",
+            description=(
+                "General text generation tool using configured LLM runtime. "
+                "Supports optional system prompt and per-call model/temperature/token overrides."
+            ),
+        )
+        def llm_generate(
+            prompt: str,
+            system_prompt: str | None = None,
+            model: str | None = None,
+            temperature: float | None = None,
+            max_output_tokens: int | None = None,
+        ) -> dict[str, object]:
+            return llm_runtime.generate(
+                prompt=prompt,
+                system_prompt=system_prompt,
+                model=model,
+                temperature=temperature,
+                max_output_tokens=max_output_tokens,
+            )
+
     @server.resource(
         uri="omni://server/capabilities",
         name="Server Capabilities",
@@ -124,6 +162,7 @@ def register_builtin_skills(server: FastMCP, settings: Settings, policy: Securit
                     "tools": True,
                     "resources": True,
                     "prompts": True,
+                    "llm": settings.enable_llm_skill,
                 },
             },
             indent=2,

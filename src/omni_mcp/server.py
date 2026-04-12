@@ -5,9 +5,10 @@ from __future__ import annotations
 import logging
 
 from mcp.server.fastmcp import FastMCP
-from pythonjsonlogger.json import JsonFormatter
+from pythonjsonlogger.jsonlogger import JsonFormatter
 
 from omni_mcp.config import get_settings
+from omni_mcp.llm_runtime import LlmRuntime
 from omni_mcp.security import SecurityPolicy
 from omni_mcp.skills import register_builtin_skills
 
@@ -31,12 +32,14 @@ def create_server() -> FastMCP:
     _configure_logging(settings.log_level)
 
     policy = SecurityPolicy(settings)
+    llm_runtime = LlmRuntime(settings=settings, policy=policy)
 
     server = FastMCP(
         name="omni-mcp",
         instructions=(
-            "General-purpose MCP hub with secure-by-default built-in tools, resources, and prompts."
+            "General-purpose MCP hub with secure-by-default built-in tools, resources, prompts, "
+            "and optional LLM runtime support."
         ),
     )
-    register_builtin_skills(server=server, settings=settings, policy=policy)
+    register_builtin_skills(server=server, settings=settings, policy=policy, llm_runtime=llm_runtime)
     return server

@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import re
 from urllib.parse import urlparse
 
 from omni_mcp.config import Settings
@@ -14,8 +13,6 @@ class SecurityError(ValueError):
 
 class SecurityPolicy:
     """Enforces local policy rules for sensitive operations."""
-
-    _TENANT_ID_RE = re.compile(r"^[a-zA-Z0-9._@:-]{3,128}$")
 
     def __init__(self, settings: Settings) -> None:
         self._settings = settings
@@ -35,20 +32,3 @@ class SecurityPolicy:
             raise SecurityError(
                 f"Host '{parsed.hostname}' is not in OMNI_MCP_ALLOWED_OUTBOUND_HOSTS."
             )
-
-    def validate_tenant_id(self, tenant_id: str) -> None:
-        """Validate tenant identifier format for user-is-tenant model."""
-
-        if not self._TENANT_ID_RE.fullmatch(tenant_id.strip()):
-            raise SecurityError(
-                "Invalid tenant_id. Allowed charset: letters, digits, dot, underscore, at, colon, hyphen."
-            )
-
-    def enforce_shared_secret(self, provided_secret: str | None) -> None:
-        """Validate shared secret for integrations that use simple symmetric auth."""
-
-        configured = self._settings.client_auth_shared_secret
-        if configured is None:
-            return
-        if not provided_secret or provided_secret != configured:
-            raise SecurityError("Invalid shared secret.")
