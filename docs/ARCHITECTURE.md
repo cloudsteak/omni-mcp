@@ -13,7 +13,8 @@
 ## Repository landscape
 
 - `omni-mcp`: MCP server runtime and skills
-- `omni-studio`: client application (UI + backend orchestration)
+- `omni-studio`: client application (UI)
+- `omni-backend`: API + scheduler + orchestration
 - `helm-charts`: deployment packaging
 
 ## Runtime flow (Mermaid)
@@ -21,27 +22,29 @@
 ```mermaid
 %%{init: {"theme": "base"}}%%
 flowchart LR
-    U[User] --> C["omni-studio client"]
-    S[Slack] --> C
-    C -->|MCP stdio / streamable-http| M[omni-mcp server]
+    U[User] --> ST["omni-studio<br/>UI"]
+    X[External channels] --> ST
+    ST --> BE["omni-backend<br/>API + Scheduler + Orchestrator"]
+    BE -->|MCP calls| MCP["omni-mcp<br/>Skills + Agents Execution"]
+    BE --> DB[(PostgreSQL)]
+    MCP --> DB
 
-    M --> P["SecurityPolicy<br/>(HTTPS, allowlist, limits)"]
-    M --> K["Built-in Skills<br/>Tools / Resources / Prompts"]
-    K --> R[Result]
-    R --> C
-    C --> U
+    HC["helm-charts"] --> K8S["Kubernetes"]
+    K8S --> ST
+    K8S --> BE
+    K8S --> MCP
 
     classDef actor fill:#E3F2FD,stroke:#1E88E5,color:#0D47A1,stroke-width:1px;
-    classDef client fill:#E8F5E9,stroke:#43A047,color:#1B5E20,stroke-width:1px;
-    classDef server fill:#FFF3E0,stroke:#FB8C00,color:#E65100,stroke-width:1px;
-    classDef policy fill:#F3E5F5,stroke:#8E24AA,color:#4A148C,stroke-width:1px;
-    classDef result fill:#FBE9E7,stroke:#F4511E,color:#BF360C,stroke-width:1px;
+    classDef app fill:#E8F5E9,stroke:#43A047,color:#1B5E20,stroke-width:1px;
+    classDef backend fill:#FFF3E0,stroke:#FB8C00,color:#E65100,stroke-width:1px;
+    classDef infra fill:#F3E5F5,stroke:#8E24AA,color:#4A148C,stroke-width:1px;
+    classDef data fill:#FBE9E7,stroke:#F4511E,color:#BF360C,stroke-width:1px;
 
-    class U,S actor;
-    class C client;
-    class M,K server;
-    class P policy;
-    class R result;
+    class U,X actor;
+    class ST app;
+    class BE,MCP backend;
+    class HC,K8S infra;
+    class DB data;
 ```
 
 ## Component structure (Mermaid)
@@ -55,7 +58,7 @@ graph TD
     B --> E["src/omni_mcp/skills/builtin.py<br/>Tools/Resources/Prompts"]
 
     F["Dockerfile<br/>container runtime"] --> B
-    G["deploy/helm/omni-mcp<br/>Kubernetes packaging"] --> F
+    G["cloudsteak/helm-charts<br/>Kubernetes packaging"] --> F
 
     classDef app fill:#E3F2FD,stroke:#1E88E5,color:#0D47A1,stroke-width:1px;
     classDef core fill:#FFF3E0,stroke:#FB8C00,color:#E65100,stroke-width:1px;
@@ -101,8 +104,6 @@ flowchart TD
 
 ## Client communication model
 
-- Primary client: dedicated app in `omni-studio`
-- Protocol: MCP transport (`stdio` locally, `streamable-http` for networked deployments)
-- Slack requests: handled by client, then forwarded to `omni-mcp` over MCP
-
-This keeps Slack credentials and channel-specific logic out of the server runtime.
+- Primary client: `omni-studio`
+- Control plane: `omni-backend` (auth-aware API, scheduling, orchestration)
+- Execution plane: `omni-mcp` over MCP transport

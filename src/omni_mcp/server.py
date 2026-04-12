@@ -8,10 +8,8 @@ from mcp.server.fastmcp import FastMCP
 from pythonjsonlogger.json import JsonFormatter
 
 from omni_mcp.config import get_settings
-from omni_mcp.rss_digest import RssDigestService
 from omni_mcp.security import SecurityPolicy
-from omni_mcp.skills import register_builtin_skills, register_rss_digest_skills
-from omni_mcp.storage import initialize_schema
+from omni_mcp.skills import register_builtin_skills
 
 
 def _configure_logging(level: str) -> None:
@@ -32,19 +30,13 @@ def create_server() -> FastMCP:
     settings = get_settings()
     _configure_logging(settings.log_level)
 
-    if settings.auto_create_schema:
-        initialize_schema(settings.database_url)
-
     policy = SecurityPolicy(settings)
-    rss_digest_service = RssDigestService(settings=settings, policy=policy)
 
     server = FastMCP(
         name="omni-mcp",
         instructions=(
-            "General-purpose MCP server with secure-by-default built-in skills. "
-            "This instance is pre-configured for RSS polling and category digest workflows."
+            "General-purpose MCP hub with secure-by-default built-in tools, resources, and prompts."
         ),
     )
     register_builtin_skills(server=server, settings=settings, policy=policy)
-    register_rss_digest_skills(server=server, settings=settings, service=rss_digest_service)
     return server

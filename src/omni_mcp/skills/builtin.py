@@ -40,9 +40,7 @@ def register_builtin_skills(server: FastMCP, settings: Settings, policy: Securit
                 "file_read": settings.enable_file_read_skill,
                 "time": settings.enable_time_skill,
                 "json": settings.enable_json_skill,
-                "rss_digest": settings.enable_rss_digest_skills,
             },
-            "use_case_profiles": ["rss_digest_automation"],
         }
 
     if settings.enable_time_skill:
@@ -126,9 +124,6 @@ def register_builtin_skills(server: FastMCP, settings: Settings, policy: Securit
                     "tools": True,
                     "resources": True,
                     "prompts": True,
-                    "rss_digest_automation": True,
-                    "google_oauth_frontend": "planned_in_omni_studio",
-                    "slack_client_ingress": "planned_in_omni_studio",
                 },
             },
             indent=2,

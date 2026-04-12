@@ -13,7 +13,8 @@ Az `omni-mcp` egy moduláris, FastMCP alapú Python szerver:
 ## Repository felosztás
 
 - `omni-mcp`: MCP szerver futtatás és skill-ek
-- `omni-studio`: kliens alkalmazás (UI + backend orchestration)
+- `omni-studio`: kliens alkalmazás (UI)
+- `omni-backend`: API + scheduler + orchestration
 - `helm-charts`: deployment csomagolás
 
 ## Működési folyamat (Mermaid)
@@ -21,27 +22,29 @@ Az `omni-mcp` egy moduláris, FastMCP alapú Python szerver:
 ```mermaid
 %%{init: {"theme": "base"}}%%
 flowchart LR
-    U[Felhasználó] --> C["omni-studio kliens"]
-    S[Slack] --> C
-    C -->|MCP stdio / streamable-http| M[omni-mcp szerver]
+    U[Felhasználó] --> ST["omni-studio<br/>UI"]
+    X[Külső csatornák] --> ST
+    ST --> BE["omni-backend<br/>API + Scheduler + Orchestrator"]
+    BE -->|MCP hívások| MCP["omni-mcp<br/>Skill + Agent végrehajtás"]
+    BE --> DB[(PostgreSQL)]
+    MCP --> DB
 
-    M --> P["SecurityPolicy<br/>(HTTPS, allowlist, limitek)"]
-    M --> K["Beépített skill-ek<br/>Tool / Resource / Prompt"]
-    K --> R[Válasz]
-    R --> C
-    C --> U
+    HC["helm-charts"] --> K8S["Kubernetes"]
+    K8S --> ST
+    K8S --> BE
+    K8S --> MCP
 
     classDef actor fill:#E3F2FD,stroke:#1E88E5,color:#0D47A1,stroke-width:1px;
-    classDef client fill:#E8F5E9,stroke:#43A047,color:#1B5E20,stroke-width:1px;
-    classDef server fill:#FFF3E0,stroke:#FB8C00,color:#E65100,stroke-width:1px;
-    classDef policy fill:#F3E5F5,stroke:#8E24AA,color:#4A148C,stroke-width:1px;
-    classDef result fill:#FBE9E7,stroke:#F4511E,color:#BF360C,stroke-width:1px;
+    classDef app fill:#E8F5E9,stroke:#43A047,color:#1B5E20,stroke-width:1px;
+    classDef backend fill:#FFF3E0,stroke:#FB8C00,color:#E65100,stroke-width:1px;
+    classDef infra fill:#F3E5F5,stroke:#8E24AA,color:#4A148C,stroke-width:1px;
+    classDef data fill:#FBE9E7,stroke:#F4511E,color:#BF360C,stroke-width:1px;
 
-    class U,S actor;
-    class C client;
-    class M,K server;
-    class P policy;
-    class R result;
+    class U,X actor;
+    class ST app;
+    class BE,MCP backend;
+    class HC,K8S infra;
+    class DB data;
 ```
 
 ## Komponens felépítés (Mermaid)
@@ -55,7 +58,7 @@ graph TD
     B --> E["src/omni_mcp/skills/builtin.py<br/>Tool/Resource/Prompt"]
 
     F["Dockerfile<br/>konténer futtatás"] --> B
-    G["deploy/helm/omni-mcp<br/>Kubernetes csomagolás"] --> F
+    G["cloudsteak/helm-charts<br/>Kubernetes csomagolás"] --> F
 
     classDef app fill:#E3F2FD,stroke:#1E88E5,color:#0D47A1,stroke-width:1px;
     classDef core fill:#FFF3E0,stroke:#FB8C00,color:#E65100,stroke-width:1px;

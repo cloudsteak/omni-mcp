@@ -1,25 +1,15 @@
 # omni-mcp
 
-Security-focused, general-purpose Python MCP server scaffold.
+Security-focused, general-purpose Python MCP hub.
 
 ## Built-in MCP tools
 
-Core:
 - `core.ping`
 - `core.server_info`
 - `time.now`
 - `json.pretty`
 - `http.fetch_text`
 - `files.read_text`
-
-Extended:
-- `tenant.upsert_preferences`
-- `rss.add_feed`
-- `rss.list_feeds`
-- `rss.poll`
-- `rss.list_recent_items`
-- `digest.generate_category_summary`
-- `digest.list_history`
 
 ## Quick Start (Local)
 
@@ -35,13 +25,7 @@ uv sync --extra dev
 cp .env.example .env
 ```
 
-3. Initialize database schema:
-
-```bash
-uv run omni-mcp --init-db-only
-```
-
-4. Run locally over stdio:
+3. Run locally over stdio:
 
 ```bash
 uv run omni-mcp --transport stdio
@@ -56,25 +40,10 @@ docker run --rm -p 8080:8080 --env-file .env omni-mcp:local
 
 Default container command uses `streamable-http` on port `8080`.
 
-## Kubernetes + Helm
+## Helm Charts
 
-Chart location in this repo:
-`deploy/helm/omni-mcp`
-
-Install example:
-
-```bash
-helm upgrade --install omni-mcp ./deploy/helm/omni-mcp
-```
-
-Target chart repo:
+Helm chart is managed in a separate repository:
 `/Users/sipp/dev/github.com/cloudsteak/helm-charts`
-
-## Repo responsibilities
-
-- `omni-mcp`: MCP server + standard skills/agents
-- `omni-studio`: frontend + application backend
-- `helm-charts`: Helm charts
 
 ## Documentation
 
