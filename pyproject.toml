@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "omni-mcp"
+version = "0.1.0"
+description = "General-purpose, security-focused Python MCP server scaffold"
+readme = "README.md"
+requires-python = ">=3.12"
+license = "MIT"
+authors = [{ name = "Cloudsteak" }]
+dependencies = [
+  "mcp>=1.6.0,<2.0.0",
+  "pydantic>=2.8.0,<3.0.0",
+  "pydantic-settings>=2.4.0,<3.0.0",
+  "httpx>=0.27.0,<1.0.0",
+  "python-json-logger>=2.0.7,<3.0.0",
+]
+
+[project.optional-dependencies]
+slack = [
+  "slack-sdk>=3.30.0,<4.0.0",
+]
+dev = [
+  "pytest>=8.3.0,<9.0.0",
+  "ruff>=0.6.0,<1.0.0",
+  "mypy>=1.11.0,<2.0.0",
+]
+
+[project.scripts]
+omni-mcp = "omni_mcp.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/omni_mcp"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "C4", "SIM", "RUF"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
