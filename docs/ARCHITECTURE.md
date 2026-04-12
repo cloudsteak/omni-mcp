@@ -20,6 +20,7 @@
 ## Runtime flow (Mermaid)
 
 ```mermaid
+%%{init: {"theme": "base"}}%%
 flowchart LR
     U[User] --> C["omni-studio client<br/>(Phase 2)"]
     S[Slack] --> C
@@ -30,11 +31,24 @@ flowchart LR
     K --> R[Result]
     R --> C
     C --> U
+
+    classDef actor fill:#E3F2FD,stroke:#1E88E5,color:#0D47A1,stroke-width:1px;
+    classDef client fill:#E8F5E9,stroke:#43A047,color:#1B5E20,stroke-width:1px;
+    classDef server fill:#FFF3E0,stroke:#FB8C00,color:#E65100,stroke-width:1px;
+    classDef policy fill:#F3E5F5,stroke:#8E24AA,color:#4A148C,stroke-width:1px;
+    classDef result fill:#FBE9E7,stroke:#F4511E,color:#BF360C,stroke-width:1px;
+
+    class U,S actor;
+    class C client;
+    class M,K server;
+    class P policy;
+    class R result;
 ```
 
 ## Component structure (Mermaid)
 
 ```mermaid
+%%{init: {"theme": "base"}}%%
 graph TD
     A["src/omni_mcp/main.py<br/>CLI + transport"] --> B["src/omni_mcp/server.py<br/>FastMCP assembly"]
     B --> C["src/omni_mcp/config.py<br/>Settings"]
@@ -43,11 +57,20 @@ graph TD
 
     F["Dockerfile<br/>container runtime"] --> B
     G["deploy/helm/omni-mcp<br/>Kubernetes packaging"] --> F
+
+    classDef app fill:#E3F2FD,stroke:#1E88E5,color:#0D47A1,stroke-width:1px;
+    classDef core fill:#FFF3E0,stroke:#FB8C00,color:#E65100,stroke-width:1px;
+    classDef deploy fill:#E8F5E9,stroke:#43A047,color:#1B5E20,stroke-width:1px;
+
+    class A,C,D,E app;
+    class B core;
+    class F,G deploy;
 ```
 
 ## Deployment topology (Mermaid)
 
 ```mermaid
+%%{init: {"theme": "base"}}%%
 flowchart TD
     subgraph Local[Local development]
         L1[Developer machine]
@@ -67,6 +90,14 @@ flowchart TD
         K3[Pod: omni-mcp]
         K1 --> K2 --> K3
     end
+
+    classDef local fill:#E3F2FD,stroke:#1E88E5,color:#0D47A1,stroke-width:1px;
+    classDef docker fill:#FFF8E1,stroke:#F9A825,color:#E65100,stroke-width:1px;
+    classDef k8s fill:#E8F5E9,stroke:#43A047,color:#1B5E20,stroke-width:1px;
+
+    class L1,L2 local;
+    class D1,D2 docker;
+    class K1,K2,K3 k8s;
 ```
 
 ## Client communication model (planned)
