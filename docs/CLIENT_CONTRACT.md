@@ -1,4 +1,4 @@
-# Phase 2 Client Contract (`omni-studio`)
+# Client Contract (`omni-studio`)
 
 Target repo:
 `/Users/sipp/dev/github.com/cloudsteak/omni-studio`
@@ -6,8 +6,8 @@ Target repo:
 ## Responsibilities
 
 Client will:
-- authenticate end users and external channels
-- optionally receive Slack events/webhooks
+- authenticate end users
+- optionally receive external events/webhooks
 - map user requests to MCP tool/resource/prompt calls
 - forward validated calls to `omni-mcp`
 

@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import argparse
 
+from omni_mcp.config import get_settings
 from omni_mcp.server import create_server
+from omni_mcp.storage import initialize_schema
 
 
 def main() -> None:
@@ -19,7 +21,17 @@ def main() -> None:
     )
     parser.add_argument("--host", default="0.0.0.0", help="Host for network transports.")
     parser.add_argument("--port", type=int, default=8080, help="Port for network transports.")
+    parser.add_argument(
+        "--init-db-only",
+        action="store_true",
+        help="Initialize database schema and exit.",
+    )
     args = parser.parse_args()
+
+    settings = get_settings()
+    if args.init_db_only:
+        initialize_schema(settings.database_url)
+        return
 
     server = create_server()
 

@@ -1,4 +1,4 @@
-# Kliens Szerződés (HU) - 2. Fázis
+# Kliens Szerződés (HU)
 
 Cél repó:
 `/Users/sipp/dev/github.com/cloudsteak/omni-studio`
@@ -6,7 +6,7 @@ Cél repó:
 ## Felelősségek
 
 A kliens feladata:
-- felhasználói/Slack kérések fogadása
+- felhasználói/külső kérések fogadása
 - hitelesítés és jogosultság ellenőrzés
 - MCP hívások forwardolása az `omni-mcp` felé
 

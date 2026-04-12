@@ -1,16 +1,19 @@
-.PHONY: install lint test run build-image
+.PHONY: install lint test init-db run build-image
 
 install:
-	pip install -e '.[dev]'
+	uv sync --extra dev
 
 lint:
-	ruff check .
+	uv run ruff check .
 
 test:
-	pytest -q
+	uv run pytest -q
+
+init-db:
+	uv run omni-mcp --init-db-only
 
 run:
-	omni-mcp --transport stdio
+	uv run omni-mcp --transport stdio
 
 build-image:
 	docker build -t omni-mcp:local .

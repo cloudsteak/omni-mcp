@@ -1,3 +1,5 @@
+import pytest
+
 from omni_mcp.config import Settings
 from omni_mcp.security import SecurityError, SecurityPolicy
 
@@ -8,11 +10,8 @@ def test_https_required() -> None:
 
     policy.validate_outbound_url("https://example.com/path")
 
-    try:
+    with pytest.raises(SecurityError):
         policy.validate_outbound_url("http://example.com")
-        assert False, "Expected SecurityError for non-HTTPS URL"
-    except SecurityError:
-        pass
 
 
 def test_allowlist_blocks_unknown_host() -> None:
@@ -21,8 +20,13 @@ def test_allowlist_blocks_unknown_host() -> None:
 
     policy.validate_outbound_url("https://example.com/ok")
 
-    try:
+    with pytest.raises(SecurityError):
         policy.validate_outbound_url("https://not-allowed.example.org")
-        assert False, "Expected SecurityError for blocked host"
-    except SecurityError:
-        pass
+
+
+def test_validate_tenant_id() -> None:
+    policy = SecurityPolicy(Settings())
+    policy.validate_tenant_id("user_123@example.com")
+
+    with pytest.raises(SecurityError):
+        policy.validate_tenant_id("bad tenant id with spaces")

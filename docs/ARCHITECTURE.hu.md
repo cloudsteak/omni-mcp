@@ -10,19 +10,18 @@ Az `omni-mcp` egy moduláris, FastMCP alapú Python szerver:
 - `security.py`: központi biztonsági policy
 - `skills/builtin.py`: beépített MCP képességek
 
-## Fázis megfeleltetés
+## Repository felosztás
 
-1. Fázis: helyi szerver (**megvalósítva**)
-2. Fázis: külön kliens az `omni-studio` repóban (**tervezett**)
-3. Fázis: Docker (**megvalósítva**)
-4. Fázis: Kubernetes + Helm (**baseline megvalósítva**)
+- `omni-mcp`: MCP szerver futtatás és skill-ek
+- `omni-studio`: kliens alkalmazás (UI + backend orchestration)
+- `helm-charts`: deployment csomagolás
 
 ## Működési folyamat (Mermaid)
 
 ```mermaid
 %%{init: {"theme": "base"}}%%
 flowchart LR
-    U[Felhasználó] --> C["omni-studio kliens<br/>(2. fázis)"]
+    U[Felhasználó] --> C["omni-studio kliens"]
     S[Slack] --> C
     C -->|MCP stdio / streamable-http| M[omni-mcp szerver]
 

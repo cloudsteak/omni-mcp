@@ -10,19 +10,18 @@
 - `src/omni_mcp/security.py`: shared security policy helpers
 - `src/omni_mcp/skills/builtin.py`: built-in MCP tools/resources/prompts
 
-## Phase mapping
+## Repository landscape
 
-1. Phase 1 (implemented): local MCP server
-2. Phase 2 (planned in another repo): dedicated client in `omni-studio`, with optional Slack ingress
-3. Phase 3 (implemented): Docker image and runtime defaults
-4. Phase 4 (implemented baseline): Kubernetes-compatible Helm chart
+- `omni-mcp`: MCP server runtime and skills
+- `omni-studio`: client application (UI + backend orchestration)
+- `helm-charts`: deployment packaging
 
 ## Runtime flow (Mermaid)
 
 ```mermaid
 %%{init: {"theme": "base"}}%%
 flowchart LR
-    U[User] --> C["omni-studio client<br/>(Phase 2)"]
+    U[User] --> C["omni-studio client"]
     S[Slack] --> C
     C -->|MCP stdio / streamable-http| M[omni-mcp server]
 
@@ -100,7 +99,7 @@ flowchart TD
     class K1,K2,K3 k8s;
 ```
 
-## Client communication model (planned)
+## Client communication model
 
 - Primary client: dedicated app in `omni-studio`
 - Protocol: MCP transport (`stdio` locally, `streamable-http` for networked deployments)

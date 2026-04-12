@@ -2,19 +2,11 @@
 
 Az `omni-mcp` egy általános célú, Python alapú MCP szerver váz, biztonságos alapbeállításokkal.
 
-## Fázisok állapota
+## Repository-k
 
-1. Alap szerver helyi futtatással: **kész**
-2. Külön kliens (`omni-studio` repo): **tervezett / előkészített szerződéssel**
-3. Docker változat: **kész**
-4. Kubernetes kompatibilitás + Helm alap: **kész (baseline)**
-
-## Főbb képességek
-
-- Tool-ok, resource-ok és prompt-ok MCP-n keresztül
-- Kapcsolható beépített skill-ek
-- Strukturált JSON logolás
-- Szigorú alap biztonsági guardok (HTTPS-only, limitált kimenő kérés, path védelem)
+- `omni-mcp`: MCP szerver és skill-ek
+- `omni-studio`: kliens alkalmazás
+- `helm-charts`: Helm chart-ok
 
 ## Fontos fájlok
 
