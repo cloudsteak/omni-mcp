@@ -115,8 +115,7 @@ Default container command uses `streamable-http` on port `8080`.
 
 ## Helm Charts
 
-Helm chart is managed in a separate repository:
-`/Users/sipp/dev/github.com/cloudsteak/helm-charts`
+Helm chart is managed in a separate repository.
 
 ## Documentation
 
